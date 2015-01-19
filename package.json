@@ -2,7 +2,7 @@
   "name": "node-xliff",
   "version": "0.0.1",
   "description": "A toolkit for creating and modifying XLIFF documents",
-  "main": "index.js",
+  "main": "xliffCreator.js",
   "directories": {
     "test": "test"
   },
