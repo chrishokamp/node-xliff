@@ -34,7 +34,7 @@ var xliff2Skeleton = '<?xml version="1.0"?>' +
 
 var xliff2UnitTemplate = '<unit>' +
                       '<segment>' +
-                        '<source></source>' +
+                        '<source/>' +
                         '<target></target>' +
                       '</segment>' +
                      '</unit>';
@@ -49,7 +49,7 @@ var xliff1Skeleton = '<?xml version="1.0"?>' +
   '</xliff>';
 
 var xliff1TransUnitTemplate = '<trans-unit >' +
-  '<source></source>' +
+  '<source/>' +
   '<target/>' +
   '</trans-unit>';
 
