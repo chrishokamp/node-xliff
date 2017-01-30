@@ -67,7 +67,7 @@ xliffCreator.createXlf2FromSourceText = function(sourceLang, targetLang, sourceS
   $xliff('xliff').attr('srcLang', sourceLang);
   $xliff('xliff').attr('trgLang', targetLang);
 
-  for (senIdx in sourceSens) {
+  for (var senIdx in sourceSens) {
     var $newUnit = cheerio.load(xliff2UnitTemplate, {
       xmlMode            : true,
       decodeEntities     : true,
@@ -98,7 +98,7 @@ xliffCreator.createXlf1FromSourceText = function(sourceLang, targetLang, sourceS
   $xliff('file').attr('source-language', sourceLang);
   $xliff('file').attr('target-language', targetLang);
 
-  for (senIdx in sourceSens) {
+  for (var senIdx in sourceSens) {
     var $newUnit = cheerio.load(xliff1TransUnitTemplate, {
       xmlMode            : true,
       decodeEntities     : true,
@@ -109,6 +109,70 @@ xliffCreator.createXlf1FromSourceText = function(sourceLang, targetLang, sourceS
     $newUnit('trans-unit').attr('id', 'tu' + senIdx);
     // set the source text of this element
     $newUnit('source').text(sourceSens[senIdx]);
+    $xliff('body').append($newUnit.xml());
+  }
+
+  return $xliff.xml();
+}
+
+// Creating XLIFFs from two lists -- source + target sentences
+xliffCreator.createXlf2FromSourceAndTargetText = function(sourceLang, targetLang, sourceSens, targetSens) {
+
+  // create a new XLIFF Skeleton
+  var $xliff = cheerio.load(xliff2Skeleton, {
+    xmlMode            : true,
+    decodeEntities     : true,
+    normalizeWhitespace: true
+  });
+
+  // set srcLang and trgLang attrs
+  $xliff('xliff').attr('srcLang', sourceLang);
+  $xliff('xliff').attr('trgLang', targetLang);
+
+  for (var senIdx in sourceSens) {
+    var $newUnit = cheerio.load(xliff2UnitTemplate, {
+      xmlMode            : true,
+      decodeEntities     : true,
+      normalizeWhitespace: true
+    });
+
+    // <unit> elements must have an id
+    $newUnit('unit').attr('id', 'u' + senIdx);
+    // set the source and target text of this element
+    $newUnit('source').text(sourceSens[senIdx]);
+    $newUnit('target').text(targetSens[senIdx]);
+    $xliff('file').append($newUnit.xml());
+  }
+
+  return $xliff.xml();
+}
+
+// Create an XLIFF 1.2 file from source text
+xliffCreator.createXlf1FromSourceAndTargetText = function(sourceLang, targetLang, sourceSens, targetSens) {
+
+  // create a new XLIFF Skeleton
+  var $xliff = cheerio.load(xliff1Skeleton, {
+    xmlMode            : true,
+    decodeEntities     : true,
+    normalizeWhitespace: true
+  });
+
+  // set srcLang and trgLang attrs
+  $xliff('file').attr('source-language', sourceLang);
+  $xliff('file').attr('target-language', targetLang);
+
+  for (var senIdx in sourceSens) {
+    var $newUnit = cheerio.load(xliff1TransUnitTemplate, {
+      xmlMode            : true,
+      decodeEntities     : true,
+      normalizeWhitespace: true
+    });
+
+    // <unit> elements must have an id
+    $newUnit('trans-unit').attr('id', 'tu' + senIdx);
+    // set the source and target text of this element
+    $newUnit('source').text(sourceSens[senIdx]);
+    $newUnit('target').text(targetSens[senIdx]);
     $xliff('body').append($newUnit.xml());
   }
 
